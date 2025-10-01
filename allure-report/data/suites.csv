@@ -1,0 +1,6 @@
+"Status","Start Time","Stop Time","Duration in ms","Parent Suite","Suite","Sub Suite","Test Class","Test Method","Name","Description"
+"failed","Sat Apr 13 16:49:42 EET 2024","Sat Apr 13 16:49:42 EET 2024","135","chromium","WebAPi2.spec.js","","","","Web Client App login",""
+"failed","Sat Apr 13 16:49:42 EET 2024","Sat Apr 13 16:49:42 EET 2024","148","chromium","E2EWeb.spec.js","","","","Web Client App login",""
+"passed","Sat Apr 13 18:01:59 EET 2024","Sat Apr 13 18:02:03 EET 2024","4761","chromium","PractiseModule\UI.spec.js","","","","@web browser test case",""
+"passed","Sat Apr 13 18:01:59 EET 2024","Sat Apr 13 18:02:14 EET 2024","15599","chromium","E2EWebPageObjectFixture.spec.js","","","","@web Sample Browser Context Playwright Test Login",""
+"failed","Sat Apr 13 16:49:42 EET 2024","Sat Apr 13 16:49:42 EET 2024","131","chromium","WebAPi2.spec.js","","","","test 2",""

@@ -1,0 +1,868 @@
+------------------"Nothing is Impossible. It all depends on how we are Trained on it."-----------------------------------------------------------
+
+Playwright -Modern Testing tool for reliable Web Automation. Support API calls with in UI tests for Smarter Automation
+install node js :
+node.js is open source cross platform back -end javascript
+runtime enviroment to to runs on v9 engine and executes javascript
+install node.js 
+
+
+Create npm project and install playwright dependcies
+- npm init playwright@latest
+
+when run any java script project 
+- pachage.json -> is the default pachage
+
+
+node_modules -> dh el jars
+
+tests -> dg feh kol test cases 
+
+github\workflows  dh fe github actions
+
+
+ahm folder 
+- tests 
+- playwright.config.js
+
+create first file 
+- UItest.spec.js 
+
+Importance of Playwright Test Annotation and async await understandin
+const {test} =require('@playwright/test')
+
+@playwright/test dh anotation from node_modules jars
+
+test dh >  These tests are executed in Playwright environment that launches the browser and provides a fresh page to each test.
+
+
+javascript ? async y3ny kol el step bt run m3 b3d lazem t3mel hold 
+step 1   open browser
+step 2   enter username 
+step 3   click 
+
+keda kol el step  sha8al me b3d 
+
+
+3ashan keda lazem tektb   "await"
+
+
+lzame tektb "async" gmb el function()
+
+
+function() eshma  anymos function mmokeb tejtbha  keda ()=>
+anymos function has no name 5alt code bta3k lightwight
+
+
+
+What is browser context and Page fixtures in Playwright ? - Example
+
+3andea browser context 
+       page fixtures 
+
+
+enta htktb ({browser})
+dh kycreate new fresh browser same as incongito
+    browser.newContext() 
+    context.newPage
+
+
+const context = browser.newContext()      // const dh bt3rf the varialbes 
+all the browsers are on the playwright.config.js files 
+
+1.fresh instance  // newContext
+2.create page    // page
+3.hit any URL goto("")
+
+we have browser - page
+
+------------------browser fixtures --------------------------------------------------------
+
+test("browser test case", async ({browser})=>
+{
+        const context = await browser.newContext(); 
+        const page = await context.newPage();
+        await page.goto("https//www.google.com");
+});
+
+------------------page fixtures --------------------------------------------------------
+
+test("page test case", async ({page})=>
+{
+        await page.goto("https//www.google.com");
+});
+
+
+----------------------Importance of Playwright configuration file and its details to run the tests-----------------
+Folder : Playwright.confign.js
+
+      testDir: './tests',  dh folder elly feh testcases 
+ 
+dh  browsers 
+
+      name: 'chromium',
+ 
+      name: 'firefox',
+
+      name: 'webkit', dh same as safari browser
+
+
+dh reporter files  
+ 
+    reporter: 'html',
+
+
+---------------------------------to run the tests ----------------------------------------
+- npx  playwright test
+
+- npx         dh node 
+- playwright  dh directly point to the playwright module in the node_modules
+- test   dh will trigger the [playwright.config.js] folder 
+
+
+playwright is run by default in headless mode   you need to run --headed 
+
+
+use test.only  to run testcase 
+
+
+expect()
+    await expect(page).toHaveTitle("Google");
+--------------------------to run on headless mode----------------------------------------------------------
+add headless : true on the playwright.config.js 
+
+
+----------------------------------------------
+locator  css  / xpath
+
+if id present 
+       css -> tagname#id   or #id
+if class attribute is present 
+       css -> tagname.class or .class 
+write the css based on any Attribute   
+       css -> [attribute='value']
+write css traversing from parent to child 
+       css -> parenttangname > childtagname
+if needs to write the locator based on text
+      text='' 
+****************************************************************
+textContent();  to return text 
+
+traversing parent child  // .card-body a
+fill("")    // zy el clear 
+fill("aaa") // zy el sendkeys 
+.first()   //dh byrg3 awel index
+.nth()     //  dh byrg3 awel index
+textContent() // dh byrg3 test 
+
+allTextContents() // dh byrg3 array
+
+-------------------------------------------------------------------------------------------------------
+dh el wait >  await page.waitForLoadState('networkidle');
+           >   await page.locator(".card-body b").first().waitFor();
+
+
+- how to run -> npx playwright test tests/Login.spec.js
+
+tests/Login.spec.js  // dh el folder  we dh el testcase   >> tests/Login.spec.js 
+
+-----------------------------------------Handling static Select dropdown options with Playwright-------------------------------------------------------
+- selectOption("consult")
+
+------------------------------------Select radio button -------------------------------
+- page.locator(".radiotextsty").last()
+- page.locator(".radiotextsty").first()
+
+------------------------------------Assertion-------------------------------------------
+- toBeChecked();  
+- isChecked();
+- uncheck()
+------------------------------------------------------------------
+add await  befor any actions it's 
+
+--------------------------------------Handling Child windows & Tabs------------------------------------------------------
+dh for catch newpage ----------->    context.waitForEvent(page);
+
+-----------------------------------------------------------------------------------------------------------
+3ashan java script sha9al async prallel m3 b3e laze using  -> await
+mmoken to use promis.all()   3ashan  t3fr dy pending - rejected - fullied 
+
+dh Example: law est5tdmt  context.waitForEvent('page'),      hoverlink.click(),
+
+    const [newPAge]=Promise.all(
+        [
+        context.waitForEvent('page'),
+        hoverlink.click(),
+    
+      ])
+
+------------------------And how to debug the playwright scrip------------------------------------------------------------------------
+dh by run code 3ala->    --debug   
+- npx playwright test tests/UiSelector.spec.js --debug 
+
+
+
+--------Codegen tool to record & Playback with generated automation scrip------------------------------------------------------------
+- npx playwright codegen  https://rahulshettyacademy.com/loginpagePractise/
+
+
+
+-------------------------------------Test Traces, HTML reports, logs & Screenshots for test results----------------------------------------------------------------------------
+- go to playwright.config.js
+- add screenshot: 'on'
+- use: { ...devices['Desktop Chrome'] ,headless : false , screenshot: 'on' , trace: "on"},
+- go to  |test-results| folder  3ahan te4of /screenshot and trace/
+- use: { ...devices['Desktop Chrome'] ,headless : false , screenshot: 'on' , trace: "retain-on-failure"},
+----------------------------------------------------------------------------------------------------------------------------------
+
+- lama tegy t3mel run remove test.only  3ahan ye3mel run 3ala kolo 7aga -> npx playwright test
+
+========================================================================================================
+================Demo of the Application and Test Scenarios which needs to be automated==================
+========================================================================================================
+- Login 
+- Select the product 
+- go to cart 
+- got to cart sections 
+- checkout 
+- enter credit card details
+- apply coupon
+- place an order
+- capture the order id
+-------------------------------find the text----------------------------------------
+= locator("text= Add To Cart")
+= h3:has-text(productName)"
+-----------------------------press sequentially--------------------------------------------
+-  pressSequentially("");
+-  await page.locator("[placeholder*='Country']").pressSequentially("ind");
+
+
+--------------------Importance-------------------------------------------------
+using ????? const to create varialbes
+using ????? await before any actions 
+using (===)  ???? if compare 
+includes ????? compare text 
+locator chains ????  Example ????? ->  await page.locator(".ta-results").locator("button").nth(i).click();
+.count()  ????? numbre of dropdownlists
+pressSequentially ???? to write slow 
+.isVisible() ???? check is isVisible or not 
+.waitFor() ???? wait for elemet 
+locator("text= Add To Cart")  ???? to find elemet on text 
+locator("h3:has-text('ZARA COAT 3')")  ???? to find elemet on text
+using expersion of css [button*=classname] 
+using   await page.pause(); to check insector
+using   page.locator(".user__name [type='text']").first() when have css return 2 elements
+using   toBeTruthy()
+using   .first().isVisible();
+========================How to run ==============================================
+npx playwright test tests/E2EWeb.spec.js 
+npx playwright test tests/UiSelector.spec.js --debug 
+npx playwright test tests/train.spec.js --debug 
+npx playwright test tests/train.spec.js --ui
+=======================getByLabel=============================================
+await page.getByLabel("Check me out if you Love IceCreams!").click();
+await page.goto("https://rahulshettyacademy.com/angularpractice/shop");
+await page.getByLabel("Check me out if you Love IceCreams!").click();
+await page.getByLabel("Employed").check();
+await page.getByLabel("Gender").selectOption("male");
+
+====================placeholder============================================
+ await page.getByPlaceholder("Password").fill("qwqwqw");
+
+====================getByRole==============================================
+ await page.getByRole("button",{name:'Submit'}).click();
+
+================getByText===============================================
+ await page.getByText('Success! The Form has been submitted successfully!.').isVisible();
+
+================filter==========================================
+ await page.locator('app-card').filter({hasText:'Nokia Edge'});
+
+--------------------------one step -----------------------
+await page.locator('app-card')   // locator 
+.filter({hasText:'Nokia Edge'})  // filter 
+.getByRole('button')  // button
+.click();  // click 
+
+----------------------------------------------------------------------
+    (most coommon locator css selector)
+    npx playwright test tests/MoreValidation.spec.js
+
+------39. How to automate Java/JavaScript Alert popups with Playwright--------------------
+       page.on('dialog',dialog=>dialog.accept());
+       await page.locator("#confirmbtn").click();
+
+---------------------mousehover----------------------------------------------------------
+       await page.locator("#mousehover").hover();
+
+-----------------How to handle & Automate frames with Playwright - Example------------------------------------------
+  frames is  > is a web page or an inline frame which is embedded in another web page or an HTML document embedded inside another HTML document.
+
+[law 3andek 2 elemet wa7d visible and another invisible using :visible]
+ await framePage.locator("li a[href='lifetime-access']:visible").click();
+
+
+-------------------------------41. understanding the importance of API integration calls for Web tests------------------------------------------------------------
+--------------------------------42. Playwright request method to make API calls and grab response - Example---------------------------------------------------
+3ahan te3mel api 
+use >>> request  > Exposes API that can be used for the Web API testing.
+
+
+eih el farq law 3andk test1, test2 , test3 
+beforeEach ->dh will be run  beforeEach-> test1,  beforeEach-> test2 ,beforeEach-> test3 
+beforeAll  ->  dh wil run once beforeAll test 1 , test 2 , test 3 
+
+test.beforeAll( ()=>{} );
+
+
+steps 
+1. add varible for payload 
+{"userEmail":"postman2024@gmail.com","userPassword":"User123#"}
+
+2. add request  
+ const apiContext = await request.newContext();
+ apiContext.post("https://rahulshettyacademy.com/api/ecom/auth/login");
+
+3. add the async() to solve the problem
+
+4. for post me7tage w 2paramter  apiContext.post("https://rahulshettyacademy.com/api/ecom/auth/login",{Date:loginPayLoad})
+   1. URL endpoint
+   2. payload bs  add curlly { }
+
+
+---------------------43. Parsing API response & passing token to browser local storage with Playwright------------------------------------------------------------------------------------------------------------------
+1. remove all login scripts 
+2. declare token variable 
+3. use dy el function dy page.addInitScript   
+4. implemetation dh  page.addInitScript(value => {window.localStorage.setItem('token', value);},token)
+
+--------------------interview questions-------------------------------------------------------
+- el selenium its self depende on other library to use the api 
+- playwihgt can do it by delegate the step of login to skip
+----------------------------------------------------------------------------------------
+
+---------------------44. Place order API to create order and bypass the flow in UI with mix of web/API---------------------------------------------------------------------------------------------------------
+--------------------45. End to end validation with mix of API & Web concepts - Reduce test time----------------------------------------------------------------
+-------------------46. Refactor API calls from utils folder and isolate from Web test logic--------------------------------------------------------------------
+1-create a folder utiles
+2- module.exports={APIUtils} dh for general module
+3- go to file and enter const {APIUtils}= require('./utiles/APIUtils')
+------------------------------------------------------------------------
+let when not inilized 
+const when inilized
+----------------------------48. How to save session storage using Playwright and inject into new Browser context----------------------------------------------
+1. create beforeAll 
+2. add     await context.storageState({path: 'state.json'});
+3. open file for state.json
+
+
+
+--------------------------------> you can skip the login part by using  seesion of cookies  <------------------------------------------------------
+file => wepAPI2.spec.js
+
+1.create a variable > let webContext;
+         
+2. add on beforeAll > await context.storageState({path: 'state.json'});
+
+3. add on beforeAll > webContext = await browser.newContext({storageState : 'state.json'});
+
+4. fe el 2nd testcase  > 
+   add    const page = await webContext.newPage();
+   await page.goto("https://rahulshettyacademy.com/client");
+
+
+--------------------------------49. How to debug the API steps in script using Visual code debugging-----------------------------------------------
+1.go to playwihgt.config.js 
+2.go to   trace: 'on-first-retry'
+--------------------------------51. How to intercept Network response calls with Playwright route method--------------------------------
+1. create a new file name Network.spec.js
+2. use route 
+3. use fake api
+------------------------------54. How to intercept Network request calls with Playwright - Example demo---------------------
+1.The HTTP status code '403 forbidden—you don't have permission to access this resource' 
+2.css selector when see button with text 
+
+3.use this ->  button:has-text('View')
+  await page.locator("button:has-text('View')").first().click();
+
+
+4.continue method is used to -> intercept request calls 
+ use dh  page.route
+ use dh  route => route.continue({ headers ,url : 'https"//........', cookies})
+
+------------------------------------------------------------------------------------------------------------------------------------------
+click right > format document
+
+
+----------------------56. How to abort the Network calls with Playwright - Examples-------------------------------------------------------
+dh hayeml block ll css  -> Page.route('**/*.css', route=> route.abort())
+
+dh hayeml block ll imh  -> Page.route('**/*.{jpg,png,jpeg}', route=> route.abort())
+
+page.on('request', request=> request.url());
+
+
+----------------------57. Capture Screenshots with Playwright on page & partial Element level - Demo---------------------------------------
+
+// dh for all full page //
+     await page.screenshot({path:'screeeshot.png'});
+
+
+// dh for all specific elemet //
+     await page.locator("#displayed-text").screenshot({path:'partialScreenshot.png'})
+----------------------58. What is visual testing & How to perform it using Playwright---------------------------------------------------------
+1. run first time will fail 
+2. will capture the landing-actual.png
+3. run again will compare  expect which alradt added with actual which captured
+-----------------------------------------------------------------------------------------------------------------------------------------------
+
+
+---------------------60. Introduction to excelJS node module and setting up JS Project----------------------------------------------------------
+https://www.npmjs.com/package/exceljs  Read, manipulate and write spreadsheet data and styles to XLSX and JSON.
+dy el steps for create  dependcies 
+1.make dir exceljs
+2.npm init 
+3.npm install exceljs
+4. npm install excelJS --savedev
+-----------------------------61. Traversing rows and columns of excel worksheet with excelJS library---------------------------------------------
+steps mawgooods fe project exceljs 
+tab3ns 3arf javascript is async  kol el steps run paralle lazm t7t el await
+
+//to run file name 
+enter node excelDemo.js
+
+
+// dh el script 
+
+                     const ExcelJs = require('exceljs');
+                     // dh object  ExcelJs
+                     // dh class   exceljs
+                     // dh access el method Workbook()
+                     async function excelTest() {
+                     const workbook = new ExcelJs.Workbook();
+                     await workbook.xlsx.readFile("");
+                     const worksheet = workbook.getWorksheet('Sheet1');
+                     worksheet.eachRow((row, rowNumber) => {
+
+                            row.eachCell((cell, colNumber) => {
+
+                            console.log(cell.value)
+                            })
+
+                     })
+
+                     }
+                     // dh call the method 
+                     excelTest();
+
+------------------------------------------------------------------------------------------------------------------------------------------------------
+dh ana bast5dem 3shan replace cell makan cell 
+
+                     const cell = worksheet.getCell(3,2);
+                     cell.value="Iphone";
+                     await workbook.xlsx.readFile("");
+
+---------------------------63. How to get and update the data from excel based on filter search criteria-----------------------------------------------
+
+
+---------------------------64. Strategy to handle download & uploading files using Playwright----------------------------------------------------------
+use it only lamam [type=file] ------------------>  setInputFiles()
+  await page.locator("#fileinput").setInputFiles("D:/playwight2/PlaywrightAutomationFramework/tests/Uploaddownloadexcelvalidation/download.xlsx");
+
+5aly balak lama tedos 3ala download ------------>   const downloadPromise = page.waitForEvent('download');
+
+
+
+-----------------67. What is page object pattern & Importance of its implementation----------------------------------
+[Folder/pageObject]
+ - LoginPage.js
+ - DashboardPage.js
+
+[Folder/tests]
+- E2EWebPageObject.spec.js
+
+
+steps:
+0. create a LoginPage.js
+1. create a LoginPage class
+2. create a constructor()
+3. create a fiedls signButton - userName - passWord 
+4. create a method with async + add arguments + await
+5. add module.exports = {esm el classname}  Example : module.exports = { LoginPage };
+6. add require('../pageObject/LoginPage') on test folder
+7. create const loginPage = new LoginPage(page);  
+
+-------------------68. Creating Page objects and action methods for end to end Script - Part 1-----------------------------
+steps:
+0. create a DashboardPage.js
+1. create a DashboardPage class
+2. create a constructor()
+3. dh afdel malkan leha fe login page 3ahan tcheck ot fully loaded 
+          // wait for page load
+          await page.waitForLoadState('networkidle');
+
+
+4. create a fiedls signButton - userName - passWord 
+5. create a method with async + add arguments + await
+6. add  require('../pageObject/DashboardPage') on test folder
+7. create    const dashboardPage = new DashboardPage(page); 
+8. addddddddddddddddddddddddd await lazem
+
+---------------------------------------------
+create a P0Manager class contains all objects
+1.add constructor:
+  -    this.loginPage = new LoginPage(page);
+  -    this.dashboardPage = new DashboardPage(page);
+  
+ 
+2. add require:
+       - const { LoginPage } = require('../pageObject/LoginPage')
+       - const { DashboardPage } = require('../pageObject/DashboardPage')
+
+3.add two methods: 
+- 
+    getLoginPage() {
+        return this.loginPage;
+    }
+
+-
+    getDashboardPage() {
+        return this.dashboardPage;
+    }
+4. go to LoginPage and remove         - const { LoginPage } = require('../pageObject/LoginPage')
+
+5. go to DashboardPage and remove      - const { DashboardPage } = require('../pageObject/DashboardPage')
+
+6. add  constructor(page) and     this.page = page;
+
+7. add object   const ppmanager = new POmanager(page);
+---------------------------------------------
+-------------------------69. Creating Page objects and action methods for end to end Script - Part 2
+
+
+
+
+-----------------------71. How to drive the data from external json files to playwright tests
+create file inside utiles 
+placeholder.json
+you can use esm el Example  :testcase_testData.json  -> E2EWebPageObject_TestData.json
+
+steps:
+// convert json to javascript object
+// json -> string (JSON.stringify)
+// string -> js object  (JSON.parse)
+
+
+const dataset =  JSON.parse(JSON.stringify(require("../utiles/TestData.json"))); 
+
+TestData.json
+
+{
+
+"usename":"anshika@gmail.com",
+"password":"Iamking@000",
+"productname": "ZARA COAT 3"
+}
+-------------------72. Implementing Parameterization in running tests with different data sets--------------------------
+const dataset =  JSON.parse(JSON.stringify(require("../utiles/MoreTestData.json"))); 
+
+MoreTestData.json
+
+[
+    {
+        "usename": "anshika@gmail.com",
+        "password": "Iamking@000",
+        "productname": "ZARA COAT 3"
+    },
+    {
+        "usename": "postman2024@gmail.com",
+        "password": "User123#",
+        "productname": "ADIDAS ORIGINAL"
+    }
+]
+-------------------problem-----------------------
+      kan fe problem 
+      to solve it change the productName 
+
+
+-----------------73. How to pass test data as fixture by extend test annotation behaviour------------------------------------------------------------------
+steps:
+1.create file : test-base.js
+
+2.const {base} = require('@playwright/test');
+  exports.test = base.test.extend(
+    {
+      testDataForOrder:
+            {
+                usename: "anshika@gmail.com",
+                password: "Iamking@000",
+                productname: "ZARA COAT 3"
+            }
+
+    }
+
+  )
+
+3. open -> E2EWebPageObjectFixture.spec.js
+4. add -> const {test} =  require('../utiles/test-base');
+5. add ->  custometest(`Sample Browser Context Playwright Test Login`, async ({page,testDataForOrder}) => { ....... });
+
+----------------------74. various options in use property & setting up Project configurations----------------------------------------------------------------------------------
+1.open playwihgt.config.js
+2.go to 
+  projects: [
+    {
+      name: 'chromium',
+      use: { ...devices['Desktop Chrome'] ,
+      headless : false ,
+      screenshot: 'on' ,
+      trace: "retain-on-failure"},
+      
+     },
+
+create a new  
+   playwright.config1.js
+run 
+    npx  playwright test /tests/E2EWebPageObjectFixture.spec.js  --config playwright.config1.js --project=firefox
+    npx  playwright test /tests/E2EWebPageObjectFixture.spec.js  --config playwright.config1.js --project=chrome
+    npx  playwright test /tests/E2EWebPageObjectFixture.spec.js  --config playwright.config1.js --project=webkit
+--------------------------75. View port Property on emulating browser to mobile devices with playwright--------------------------------------------
+  
+  to run on viewport width:720,height:720
+  projects: 
+    {
+      name: 'Chrome',
+      use: { ...devices['Desktop Chrome'] ,
+      headless : false ,
+      viewport:{width:720,height:720},
+      screenshot: 'on' ,
+      trace: "retain-on-failure"},
+     },
+
+  
+  to run on mobile view iPhone 11
+    {
+      name: 'Chrome',
+      use: { ...devices['iPhone 11'] ,
+      headless : false ,
+      screenshot: 'on' ,
+      trace: "retain-on-failure"},
+     },
+
+to solve problem for handel advaced SSL 
+
+      ignoreHTTPSErrors:true,
+
+to solve problem access location permissions
+
+      permissions:['geolocation'],
+
+-----------------76. Screenshots, Videos, Traces & SSL certification options setting in Config file-----------------------------------------------------
+
+to record video use this 
+     video:'retain-on-failure'
+
+------------------------------------------------------------------------------------------------------------------------------------------------------------
+      name: 'chrome',                      dh el name of project 
+      use: { ...devices['iPad (gen 5)'] ,  dh type of devices
+      headless : false ,                   dh headless or not 
+      ignoreHTTPSErrors:true,              dh igone connection not secure  
+      permissions:['geolocation'],         dh access permission for location 
+      video:'retain-on-failure',           dh recorc video 
+      screenshot: 'on' ,                   dh take screenshot  
+      trace: "retain-on-failure"}          dh trace on failure
+------------------------------------------------------------------------------------------------------------------------------------------------------------     
+
+-----------------77. how to fix flaky tests with test retry option in playwright config file----------------------
+flaky tests > might pass and might fail 
+- Network issue 
+- not sycronization 
+
+
+add it on config level   ->    retries :1  retry one more time  
+
+----------------------------------------------------------------------------------------------------------------
+playwight features 
+- implement page object pattern 
+- create API utiles
+- how to drive test data from external files 
+- how to paramterize the tests with different data sets 
+- create project configurations with playwight Config file
+- how to record video - logs - screeeshot 
+- test Retry feature in playwight
+- how tests run in paralle mode 
+
+
+--------------78. Understand how playwright run tests in serial & parallel mode and update setting---------------------
+// test files will trigger parallel
+// individual tests in the file will run in sequence 
+
+
+// worker -> test execution process
+// by defaul playwight run 5 parallel
+
+module.exports = defineConfig({
+  testDir: './tests',
+  retries :1,
+  workers:10,
+)}
+------------------79. How to run tests parallely from the same file by extending test option behaviour----------------------
+ezzy a5ly tests on same file runy parallely ?????????????????????
+dh -> // individual tests in the file will run in sequence 
+
+3ashan te3mel run 2 test case parallel use this 
+  => test.describe.configure({mode:'parallel'});
+  => Running 2 tests using 2 workers
+
+test.describe.configure({mode:'parallel'});     // dh used for running parallely
+   test("browser test case", async ({browser}))
+   test("Login test case", async ({page}))
+
+CMD : npx playwright test UI.spec.js  
+
+-----------------------------------------------------------------------------
+test.describe.configure({mode:'parallel'});     // dh used for running parallely
+=> Running 2 tests using 2 workers
+
+
+test.describe.configure({mode:'serial'});      // dh used for running serial
+=> Running 2 tests using 1 worker
+dh will will sequentail  it will passed - if it failed  - will be skiped 
+
+--------------80. Reason for test failures - Race condition - Fix them--------------------------------
+--------------81. How to tag tests and control the execution from the command line parameters--------
+dh 3ahan using tags  @Web
+dh npx playwright test --grep=@web
+
+dh 3ahan using tags @API
+npx playwright test --grep=@API
+
+
+-----------------------82. How to generate HTML & Allure reporting for Playwright Framework tests------------------
+
+
+npm i -D @playwright/test allure-playwright
+
+npx playwright test --grep=@web  --reporter=line,allure-playwright
+
+
+allure generate allure-results -o allure-report --clean
+
+allure open allure-report
+
+npx playwright install --with-deps
+
+--------------------83. How to create custom scripts to trigger the tests from package.json file---------------------------------------
+
+steps:
+1. go to pachage.json 
+2. add scripts
+  "scripts": 
+  {
+    "regression":"npx playwright test",
+    "webTests":"npx playwright test --grep=@web",
+    "APITests":"npx playwright test --grep=@api",
+    "ChromeNewConfig":"  npx  playwright test /tests/E2EWebPageObjectFixture.spec.js  --config playwright.config1.js --project=chrome"
+  }
+3.npm run regression
+
+
+----------------------84. Install & Configure Jenkins84. Install & Configure Jenkins------------------------------------------------------
+Java -jar jenkins.war -httpPort=8080 --enable-future-java
+user name :  Eslam
+password:    Acac123456
+Full name:	 Eslam Lotfy
+Jenkins URL: http://localhost:8080/
+
+
+create free stype project
+use custom workspace  : D:\playwight2\PlaywrightAutomationFramework
+Directory / add the path 
+add Execute command  : npm run webTests
+
+
+This project is parameterized
+Choice Parameter 
+Name : scripts 
+Choices: 
+    "regression":
+    "webTests":
+    "APITests":
+    "ChromeNewConfig":
+
+to run shell on ios 
+- npm run "$scripts"
+
+to run on command on window
+- npm run "%scripts%"
+
+
+-------------------86. What is Cucumber Framework ? How it fits in Playwright needs---------------------------------------------------
+use this link :-> https://github.com/cucumber/cucumber-js
+
+----------------87. Cucumber Configuration and setup feature files into Playwright Project--------------------------------------------
+npm install @cucumber/cucumber
+
+install plugin :
+Search for -> view  Extension > Cucumber (Gherkin) Full Support
+feature -> testsuit 
+Scenario -> testcase 
+
+
+
+1.create a Ecommerce.feature file under features folder
+
+2.Feature: Ecommerce validations
+  Scenario: Placing the order
+    Given a login to Ecommerce application with "username" and "password"
+    When Add "zarz coat 3" to Cart
+    Then Verify "zarz coat 3" is displayed in the cart 
+    When Enter valid details and place the order
+    Then Verify order in present on the OrderHistory
+    
+
+
+-------------------------88. Create Step Definition files and associate with Cucumber.js config file------------------------------------
+
+https://www.freecodecamp.org/news/how-to-update-node-and-npm-to-the-latest-version/
+
+
+
+problem: Cucumber can only run on Node.js versions 18 || >=20. This Node.js version is v16.15.0
+solve : npm install -g npm@latest
+solve : install node-v20.12.2-x64 on pc
+
+node --version  // to get version
+
+npx cucumber-js // to run
+
+
+-------------------89. Implement Code login into StepDefinition file and run Cucumber feature files-----------------------------
+dh very very importance 3ahan to create 'browser' gay fro m playwright.chromium.luanch();
+
+
+  const browser =playwright.chromium.launch();
+  const context = await browser.newContext(); 
+  const page = await context.newPage();
+
+
+------------------------------------92. Implement Cucumber Tags for features and also demo on Tagged Hooks to filter----------------------------------------------------------------------
+
+npx cucumber-js --tags "@Regression" --exit
+
+
+-----------------------93. Parameterization with Scenario outline & run tests Parallel in Playwright----------------------------------------------
+
+------------94. Generate HTML reports for Cucumber Playwright & Rerun failed Scenarios======================
+limitation 
+can't run feature paralle
+Scenarios can run on paralle 
+
+ye2ba 3adek one feature file has 2 Scenarios 
+Example: Feature:Greeting
+
+
+
+npx cucumber-js features/Greeting.feature --Parallel 2 --exit --format html:cucumber-report.html
+
+-------------------------------------------------------------------------------------------------------------------------------------------------------
