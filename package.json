@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "regression":"npx playwright test",
+    "regression": "npx playwright test",
     "webTests": "npx playwright test --grep=@web",
     "APITests": "npx playwright test --grep=@API",
     "ChromeNewConfig": "npx  playwright test /tests/E2EWebPageObjectFixture.spec.js  --config playwright.config1.js --project=chrome"
@@ -19,6 +19,8 @@
   },
   "dependencies": {
     "@cucumber/cucumber": "^10.4.0",
+    "axios": "^1.12.2",
+    "dotenv": "^17.2.3",
     "exceljs": "^4.4.0"
   }
 }
