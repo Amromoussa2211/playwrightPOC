@@ -1,206 +1,191 @@
-// tests/graphqlSuite.spec.js
-import { test, expect } from "@playwright/test";
-import dotenv from "dotenv";
-import { graphqlRequest } from "../utiles/graphqlClient.js";
+import { test, expect, request } from '@playwright/test';
 
-dotenv.config();
+test.describe('Trainer full flow', () => {
 
-// Shared state between tests
-let authToken;
-let createdTrainer;
-let trainerPassword = "TrainerPass123!";
-let createdPackage;
+  const baseUrl = 'https://dev.willma.life/api/graphql';
+  const trainerPassword = 'Abc@1234';
+  const trainerRoleId = '14deaea0-9a9b-11ef-915d-22142ceebac0';
+  const trainerVerificationCode = '111111';
+  const currencyID = '68009fdf-0980-4c00-b6f4-98fbca4b4b4d';
+  const adminEmail = 'superadmin@example.com';
+  const adminPassword = '#willma-admin2025##';
 
-test.describe.serial("GraphQL Trainer Flow", () => {
-  // 0. Admin Login
-  test("0. Admin Login", async () => {
-    const query = `
-      mutation AdminLogin($email: String!, $password: String!, $ip: String) {
-        loginForAdmin(data: { email: $email, password: $password }, ipAddress: $ip)
-      }
-    `;
-    const variables = {
-      email: process.env.ADMIN_EMAIL,
-      password: process.env.ADMIN_PASSWORD,
-      ip: "127.0.0.1",
-    };
+  let trainerEmail;
+  let trainerToken;
+  let trainerID;
+  let trainerRegistrationNumber;
+  let packageID;
+  let adminToken;
 
-    const data = await graphqlRequest(query, variables);
-    authToken = data.data?.loginForAdmin;
-    console.log("Admin Login Response:", data.data);
-    expect(authToken).toBeTruthy();
-  });
+  test('Trainer creation, verification, approval, and package management', async ({ request }) => {
+    // ============ 1. Create Trainer ===============
+    trainerEmail = `trainer_${Math.random().toString(36).substring(2, 8)}@example.com`;
+    console.log('✅ Trainer email:', trainerEmail);
 
-  // 1. Create Trainer
-  test("1. Create Trainer", async () => {
-    const query = `
-      mutation CreateTrainer($email: String!, $password: String!, $roleId: ID!) {
-        createUser(
-          createUserDto: {
-            email: $email
-            password: $password
-            gender: Female
-            roleId: $roleId
-          }
-        ) {
-          id
-          email
-          isVerified
-          roleId
-          createdAt
-        }
-      }
-    `;
-
-    const variables = {
-      email: `trainer_${Date.now()}@example.com`,
-      password: trainerPassword,
-      roleId: process.env.TRAINER_ROLE_ID,
-    };
-
-    const data = await graphqlRequest(query, variables, authToken);
-    createdTrainer = data.data?.createUser;
-
-    console.log("Trainer Created:", createdTrainer);
-    expect(createdTrainer).toHaveProperty("id");
-    expect(createdTrainer).toHaveProperty("email");
-  });
-
-  // 2. Verify Trainer SignUp
-  test("2. Verify Trainer SignUp", async () => {
-    expect(createdTrainer).toBeTruthy(); // Ensure trainer exists
-
-    const query = `
-      mutation VerifyUserForSignUp($email: String!, $code: String!) {
-        verifyUserForSignUp(email: $email, code: $code) {
-          token
-        }
-      }
-    `;
-
-    const variables = {
-      email: createdTrainer.email,
-      code: process.env.TRAINER_VERIFICATION_CODE || "111111",
-    };
-
-    const data = await graphqlRequest(query, variables);
-    console.log("Verify Trainer Response:", data.data);
-    expect(data.data?.verifyUserForSignUp?.token).toBeTruthy();
-  });
-
-  // 3. Trainer Login
-  test("3. Trainer Login", async () => {
-    expect(createdTrainer).toBeTruthy();
-
-    const query = `
-      mutation TrainerLogin($input: AuthenticationLoginInput!) {
-        loginAsTrainer(loginInput: $input) {
-          accessToken
-          user {
-            id
-            email
-            isVerified
-          }
-        }
-      }
-    `;
-
-    const variables = {
-      input: {
-        email: createdTrainer.email,
-        password: trainerPassword,
+    let createTrainer = await request.post(baseUrl, {
+      data: {
+        query: `
+          mutation CreateTrainer($email: String!, $password: String!, $roleId: ID!) {
+            createUser(createUserDto: { email: $email, password: $password, gender: Female, roleId: $roleId }) {
+              id email isVerified roleId createdAt
+            }
+          }`,
+        variables: {
+          email: trainerEmail,
+          password: trainerPassword,
+          roleId: trainerRoleId,
+        },
       },
-    };
+    });
 
-    const data = await graphqlRequest(query, variables);
-    const trainerLogin = data.data?.loginAsTrainer;
+    expect(createTrainer.ok()).toBeTruthy();
+    let trainerRes = await createTrainer.json();
+    console.log('Trainer created:', trainerRes);
 
-    console.log("Trainer Login Response:", trainerLogin);
-    expect(trainerLogin?.accessToken).toBeTruthy();
-  });
-
-  // 4. Update Trainer Status
-    test("4. Update Trainer Status", async () => {
-    const query = `
-      mutation UpdateTrainerStatusByRegistrationNumber($registrationNumber: String!, $status: TrainerStatusEnum!) {
-        updateTrainerStatusByRegistrationNumber(
-          registrationNumber: $registrationNumber
-          status: $status
-        ) {
-          id
-          registrationNumber
-          status
-          updatedAt
-        }
-      }
-    `;
-
-    const variables = {
-      registrationNumber: "REG123456", // ✅ Replace with actual trainer registrationNumber from creation
-      status: "Approved",             // ✅ Use schema’s enum value
-    };
-
-    const data = await graphqlRequest(query, variables, authToken);
-    console.log("Trainer Status Update:", data.data);
-
-    expect(data.data?.updateTrainerStatusByRegistrationNumber?.status).toBe("Approved");
-  });
-
-
-  // 5. Create Package for Trainer
-  test("5. Create Package for Trainer", async () => {
-    expect(createdTrainer).toBeTruthy();
-
-    const query = `
-      mutation CreatePackage($input: CreatePackageInput!) {
-        createPackage(input: $input) {
-          id
-          title
-          price
-        }
-      }
-    `;
-
-    const variables = {
-      input: {
-        title: "Trainer Package",
-        description: "Test Package",
-        price: 100,
-        duration: 30,
-        noSession: 5,
-        trainerId: createdTrainer.id,
-        hasSessionsOnly: true,
-        initialFormId: "form-123",
-        types: ["WORKOUT"],
+    // ============ 2. Verify Trainer with OTP ===============
+    let verify = await request.post(baseUrl, {
+      data: {
+        query: `
+          mutation VerifyUserForSignUp($email: String!, $code: String!) {
+            verifyUserForSignUp(email: $email, code: $code) { token }
+          }`,
+        variables: { email: trainerEmail, code: trainerVerificationCode },
       },
-    };
+    });
 
-    const data = await graphqlRequest(query, variables, authToken);
-    createdPackage = data.data?.createPackage;
+    expect(verify.ok()).toBeTruthy();
+    let verifyRes = await verify.json();
+    console.log('Trainer verified:', verifyRes);
 
-    console.log("Package Created:", createdPackage);
-    expect(createdPackage).toHaveProperty("id");
-  });
+    // ============ 3. Login as Trainer ===============
+    let login = await request.post(baseUrl, {
+      data: {
+        query: `
+          mutation TrainerLogin($input: AuthenticationLoginInput!) {
+            loginAsTrainer(loginInput: $input) {
+              accessToken user { id email isVerified }
+            }
+          }`,
+        variables: {
+          input: { email: trainerEmail, password: trainerPassword },
+        },
+      },
+    });
 
-  // 6. Get Package By Id
-  test("6. Get Package By Id", async () => {
-    expect(createdPackage).toBeTruthy();
+    expect(login.ok()).toBeTruthy();
+    let loginRes = await login.json();
+    trainerToken = loginRes.data.loginAsTrainer.accessToken;
+    trainerID = loginRes.data.loginAsTrainer.user.id;
+    console.log('✅ Trainer logged in, ID:', trainerID);
 
-    const query = `
-      query GetPackageById($id: ID!) {
-        getPackageById(id: $id) {
-          id
-          title
-          price
-        }
-      }
-    `;
+    // ============ 4. Create Trainer Account ===============
+    let randomLastName = `Trainer_${Math.random().toString(36).substring(2, 7)}`;
+    let createTrainerAccount = await request.post(baseUrl, {
+      headers: { Authorization: `Bearer ${trainerToken}` },
+      data: {
+        query: `
+          mutation CreateTrainer {
+            createTrainer(createTrainerDto: {
+              bio: "bio test",
+              educationState: BachelorDegree,
+              estimated_response_time: "24",
+              graduationYear: 1990,
+              name: "${randomLastName}",
+              specializations: ["b6c95f01-f83b-4649-b099-0563a0997cd6", "715c538d-668c-45b4-9578-5c3bebe6305a"],
+              trainerId: "${trainerID}",
+              yearsOfExperience: 12
+            }) {
+              registrationNumber
+            }
+          }`,
+      },
+    });
 
-    const variables = { id: createdPackage.id };
-    const data = await graphqlRequest(query, variables, authToken);
+    expect(createTrainerAccount.ok()).toBeTruthy();
+    let accountRes = await createTrainerAccount.json();
+    trainerRegistrationNumber = accountRes.data.createTrainer.registrationNumber;
+    console.log('✅ Trainer account created, registrationNumber:', trainerRegistrationNumber);
 
-    const fetchedPackage = data.data?.getPackageById;
-    console.log("Fetched Package:", fetchedPackage);
-    expect(fetchedPackage?.id).toBe(createdPackage.id);
+    // ============ 5. Admin Login to Approve ===============
+    let adminLogin = await request.post(baseUrl, {
+      data: {
+        query: `
+          mutation AdminLogin($email: String!, $password: String!, $ip: String) {
+            loginForAdmin(data: { email: $email, password: $password }, ipAddress: $ip)
+          }`,
+        variables: { email: adminEmail, password: adminPassword, ip: '127.0.0.1' },
+      },
+    });
+
+    expect(adminLogin.ok()).toBeTruthy();
+    let adminRes = await adminLogin.json();
+    adminToken = adminRes.data.loginForAdmin;
+    console.log('✅ Admin logged in');
+
+    // ============ 6. Approve Trainer by registrationNumber ===============
+    let approveTrainer = await request.post(baseUrl, {
+      headers: { Authorization: `Bearer ${adminToken}` },
+      data: {
+        query: `
+          mutation UpdateTrainerStatusByRegistrationNumber($registrationNumber: Int!, $status: TrainerStatus!) {
+            updateTrainerStatusByRegistrationNumber(registrationNumber: $registrationNumber, status: $status) {
+              id name registrationNumber status updatedAt
+            }
+          }`,
+        variables: { registrationNumber: parseInt(trainerRegistrationNumber), status: 'Approved' },
+      },
+    });
+
+    expect(approveTrainer.ok()).toBeTruthy();
+    console.log('✅ Trainer approved');
+
+    // ============ 7. Create Package ===============
+    let createPackage = await request.post(baseUrl, {
+      headers: { Authorization: `Bearer ${trainerToken}` },
+      data: {
+        query: `
+          mutation CreatePackage {
+            createPackage(createPackageInput: {
+              types: [Workout],
+              currencyId: "${currencyID}",
+              initialFormId: "024f139a-0209-47c2-b6c7-e54a0ea83d8c",
+              description: "pakage1",
+              duration: 2,
+              hasSessionsOnly: false,
+              price: 1000,
+              name: "pakagefromapi"
+            }) { id name description price }
+          }`,
+      },
+    });
+
+    expect(createPackage.ok()).toBeTruthy();
+    let pkgRes = await createPackage.json();
+    packageID = pkgRes.data.createPackage.id;
+    console.log('✅ Package created with ID:', packageID);
+
+    // ============ 8. Update Package ===============
+    let updatePackage = await request.post(baseUrl, {
+      headers: { Authorization: `Bearer ${trainerToken}` },
+      data: {
+        query: `
+          mutation UpdatePackage {
+            updatePackage(id: "${packageID}", updatePackageInput: {
+              name: "UpdatedPackageName",
+              description: "Updated description",
+              price: 1500,
+              duration: 3,
+              hasSessionsOnly: false
+            }) {
+              id name description price duration updatedAt
+            }
+          }`,
+      },
+    });
+
+    expect(updatePackage.ok()).toBeTruthy();
+    let updateRes = await updatePackage.json();
+    expect(updateRes.data.updatePackage.name).toBe('UpdatedPackageName');
+    console.log('✅ Package updated successfully, with id:', packageID);
   });
 });
