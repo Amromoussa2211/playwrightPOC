@@ -120,7 +120,7 @@ test.describe('Trainer full flow', () => {
     expect(adminLogin.ok()).toBeTruthy();
     let adminRes = await adminLogin.json();
     adminToken = adminRes.data.loginForAdmin;
-    console.log('✅ Admin logged in');
+    console.log('✅ Admin logged in to get token and approved trainer');
 
     // ============ 6. Approve Trainer by registrationNumber ===============
     let approveTrainer = await request.post(baseUrl, {
