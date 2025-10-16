@@ -74,7 +74,7 @@ Features
 
 <p align="center">
   <!-- Project image placeholder -->
-  <img src="./assets/playwright-course.png" alt="Playwright course" width="720" />
+  <img src="https://logowik.com/content/uploads/images/playwright1721168006.logowik.com.webp" alt="Playwright course" width="720" />
 </p>
 
 ---
