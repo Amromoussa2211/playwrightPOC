@@ -1,7 +1,7 @@
 # Hi, I'm Amr Moussa 👋
 
 <p align="center">
-  <img src="./assets/cover.jpg" alt="cover" width="100%" />
+  <img src="https://user-images.githubusercontent.com/18361917/172057901-fe99a591-766a-4a34-af80-6e8507ed5408.png" alt="cover" width="100%" />
 </p>
 
 <p align="center">
