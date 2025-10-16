@@ -1,5 +1,29 @@
 "# Playwright-JS-Automation-Testing-from-Scratch-with-Framework"
 
+# Hi, I'm Faisal Khatri 👋
+
+I’m a passionate self-taught Software Testing Professional from Mumbai, India.  
+I’m an open-source enthusiast and maintainer, and have learned a lot from the open-source community. I love to share my experience and learnings through blogs. I’m working towards giving back to the community what I have learned from it.
+
+---
+
+➡️ Check out my website: [ https://linktr.ee/Amr_kaza ]
+
+💼 For freelance work or paid training on Software Testing / Test Automation: mailto:amro_kaza@hotmail.com
+
+💬 Ask me about anything related to Software Testing / Test Automation — I’ll be happy to help!
+
+---
+
+## 📊 Profile stats
+
+
+---
+
+If you like my work, please consider buying me a tea/coffee:
+[Buy Me A Coffee](https://www.buymeacoffee.com/)
+
+
 ✨ Project #10 ✨ 📅 Project Date: April 14, 2024
 
 Features 
