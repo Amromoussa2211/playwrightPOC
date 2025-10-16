@@ -1,8 +1,8 @@
 "# Playwright-JS-Automation-Testing-from-Scratch-with-Framework"
 
-# Hi, I'm Faisal Khatri 👋
+# Hi, I'm Amr moussa 👋
 
-I’m a passionate self-taught Software Testing Professional from Mumbai, India.  
+I’m a passionate self-taught Software Testing Professional from cairo, Egypt.  
 I’m an open-source enthusiast and maintainer, and have learned a lot from the open-source community. I love to share my experience and learnings through blogs. I’m working towards giving back to the community what I have learned from it.
 
 ---
