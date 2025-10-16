@@ -5,7 +5,7 @@
 </p>
 
 <p align="center">
-  <img src="./assets/profile.jpg" alt="Amr Moussa" width="140" style="border-radius:50%; margin-top: -70px; box-shadow: 0 4px 12px rgba(0,0,0,0.15)"/>
+  <img src="https://drive.google.com/uc?export=view&id=1wtdc7yM8LF_QNCVVGcE6SM0NUd8pYnbw" alt="Your Name" width="140" style="border-radius:50%; margin-top: -70px; box-shadow: 0 4px 12px rgba(0,0,0,0.15)"/>
 </p>
 
 I’m a passionate self-taught Software Testing Professional from Cairo, Egypt.  
