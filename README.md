@@ -8,6 +8,7 @@
   <img src="https://drive.google.com/uc?export=view&id=1wtdc7yM8LF_QNCVVGcE6SM0NUd8pYnbw" alt="Your Name" width="140" style="border-radius:50%; margin-top: -70px; box-shadow: 0 4px 12px rgba(0,0,0,0.15)"/>
 </p>
 
+I’m  a passionate self-taught Software Testing Professional from Cairo, Egypt.  
 I’m a passionate self-taught Software Testing Professional from Cairo, Egypt.  
 I’m an open-source enthusiast and maintainer, and have learned a lot from the open-source community. I love to share my experience and learnings through blogs. I’m working towards giving back to the community what I have learned from it.
 
