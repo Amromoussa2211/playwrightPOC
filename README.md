@@ -9,6 +9,7 @@
 </p>
 
 I’m  a passionate self-taught Software Testing Professional from Cairo, Egypt.  
+I’m a passionate self-taught Software Testing Professional from Cairo, Egypt.  
 I’m an open-source enthusiast and maintainer, and have learned a lot from the open-source community. I love to share my experience and learnings through blogs. I’m working towards giving back to the community what I have learned from it.
 
 ---
